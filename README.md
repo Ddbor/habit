@@ -8,13 +8,19 @@
 
 ## Install
 
+**npm**
+
 ```bash
 npm install @ddbor/habit
 ```
 
+**yarn**
+
 ```bash
 yarn add @ddbor/habit
 ```
+
+**pnpm**
 
 ```bash
 pnpm add @ddbor/habit
