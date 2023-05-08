@@ -17,7 +17,7 @@ import { useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 
 export default () => {
-  const [value, setValue] = useState([dayjs(new Date()), dayjs(new Date())]);
+  const [value, setValue] = useState([dayjs(), dayjs()]);
 
   return (
     <HabitRangePicker
@@ -91,7 +91,7 @@ const rangePresets: RangePreset[] = [
 ];
 
 export default () => {
-  const [value, setValue] = useState([dayjs(new Date()), dayjs(new Date())]);
+  const [value, setValue] = useState([dayjs(), dayjs()]);
 
   return (
     <HabitRangePicker
@@ -115,7 +115,7 @@ import { useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 
 export default () => {
-  const [value, setValue] = useState([dayjs(new Date()), dayjs(new Date())]);
+  const [value, setValue] = useState([dayjs(), dayjs().subtract(1, 'd')]);
   const [compareValue, setCompareValue] = useState(true);
 
   return (
@@ -125,7 +125,6 @@ export default () => {
       onChange={(dates, dateString, compared) => {
         setValue(dates);
         setCompareValue(compared);
-        console.log(compared);
       }}
     />
   );
@@ -150,6 +149,7 @@ export default () => {
 | `endDatePickerProps`   | 结束日期选择框的属性                                                                                                                                                                        | [PickerProps](https://ant-design.antgroup.com/components/date-picker-cn#datepicker)        | -      |
 | `presets`              | 预设时间范围快捷选择                                                                                                                                                                        | Array<[PresetType](/components/habit-range-picker#presettype)>                             | -      |
 | `format`               | 展示的日期格式，配置参考 [dayjs#format](https://day.js.org/docs/zh-CN/display/format#%E6%94%AF%E6%8C%81%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%8D%A0%E4%BD%8D%E7%AC%A6%E5%88%97%E8%A1%A8)。 | [formatType](#formattype)                                                                  | -      |
+| `compared`             | 对比开关状态，传入此字段会开启一个对比开关                                                                                                                                                  | `boolean`                                                                                  | -      |
 | `onChange`             | 日期范围发生变化的回调                                                                                                                                                                      | `(dates: [Dayjs, Dayjs],dateStrings: [string, string],compared: boolean \| null]) => void` | -      |
 
 ### PresetType

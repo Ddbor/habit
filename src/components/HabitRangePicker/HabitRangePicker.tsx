@@ -96,17 +96,8 @@ export const HabitRangePicker: FC<HabitRangePickerProps> = ({
 
   // 禁用结束日期选项
   const disabledEndDatePicker = useMemo(
-    () => showCompared && !isCompared,
-    [showCompared, isCompared],
-  );
-
-  // 文字样式
-  const showRangeStringStyle = useMemo(
-    () =>
-      ({
-        textAlign: showCompared && !disabledEndDatePicker ? 'center' : 'left',
-      } as any),
-    [showCompared, disabledEndDatePicker],
+    () => showCompared && !compared,
+    [showCompared, compared],
   );
 
   // 下拉图片旋转角度
@@ -148,22 +139,35 @@ export const HabitRangePicker: FC<HabitRangePickerProps> = ({
       commonLabel ? '' : showRangeString[1],
     ];
   }, [
-    value, // 当前日期范围
-    presets, // 预设日期范围
-    showCompared, // 是否显示对比
-    disabledEndDatePicker, // 结束日期是否被禁用
-    showRangeString, // 原日期字符串
-    presetActionText, // 当前选择的快捷日期文本
+    value,
+    presets,
+    disabledEndDatePicker,
+    showCompared,
+    showRangeString,
+    presetActionText,
   ]);
+
+  // 文字样式
+  const showRangeStringStyle = useMemo(
+    () =>
+      ({
+        textAlign: presetTextList[1] ? 'center' : 'left',
+      } as any),
+    [presetTextList],
+  );
 
   // 开始日期禁用的范围
   const disabledStartDate: RangePickerProps['disabledDate'] = useCallback(
     (current: Dayjs) => {
-      return (
-        current &&
-        ((disabledEndDatePicker && current > dayjs().endOf('d')) || // 当被禁用结束日期时，开始日期不能大于今天
-          (range[1] && current > range[1])) // 当结束日期存在时，开始日期不能大于结束日期
-      );
+      if (!current) {
+        return false;
+      }
+      // 当被禁用结束日期时，开始日期不能大于今天
+      if (disabledEndDatePicker) {
+        return current > dayjs().endOf('d');
+      }
+      // 当结束日期存在时，开始日期不能大于结束日期
+      return range[1] && current > range[1];
     },
     [range[1], disabledEndDatePicker],
   );
@@ -173,7 +177,8 @@ export const HabitRangePicker: FC<HabitRangePickerProps> = ({
     (current: Dayjs) => {
       return (
         current &&
-        ((range[0] && current < range[0]) || current > dayjs().endOf('d')) // 结束日期不能小于开始日期，也不能大于今天
+        // 结束日期不能小于开始日期，也不能大于今天
+        ((range[0] && current < range[0]) || current > dayjs().endOf('d'))
       );
     },
     [range[0], disabledEndDatePicker],
