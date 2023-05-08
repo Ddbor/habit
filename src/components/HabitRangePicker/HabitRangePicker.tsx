@@ -66,18 +66,18 @@ export const HabitRangePicker: FC<HabitRangePickerProps> = ({
   compared,
   onChange,
 }) => {
-  // 原日期字符串
+  // 原日期字符串，用于计算真正显示在页面上的文字
   const [showRangeString, setShowRangeString] = useState<[string, string]>([
     '',
     '',
   ]);
-  // 存储选择的日期
+  // 存储选择的日期，用于在提交时使用
   const [range, setRange] = useState<[Dayjs, Dayjs]>(value);
-  // 存储选择的日期字符串
+  // 存储选择的日期字符串，用于在提交时使用
   const [rangeString, setRangeString] = useState<[string, string]>(['', '']);
   // 气泡卡片显隐
   const [popoverOpen, setPopoverOpen] = useState(false);
-  // 是否显示对比
+  // 是否显示对比开关
   const showCompared = useMemo(() => {
     return typeof compared === 'boolean';
   }, [compared]);
@@ -86,15 +86,16 @@ export const HabitRangePicker: FC<HabitRangePickerProps> = ({
   // 当选择了【最近7天】时，这个字段会显示【最近7天】，但是当选择了【上周】时，如果日期一样的话这个字段还是会显示【最近7天】
   // 所以需要一个字段来存储当前选择的快捷日期文本
   const [presetActionText, setPresetActionText] = useState<React.ReactNode>('');
-
-  // 是否开启对比
+  // 对比开关的当前状态，用于在提交时使用
   const [isCompared, setIsCompared] = useState<boolean | null>(false);
 
+  // 设置全新的对比开关状态
   useEffect(() => {
     setIsCompared(showCompared ? compared! : null);
   }, [compared]);
 
   // 禁用结束日期选项
+  // 当选择了对比开关时，结束日期选项会被禁用
   const disabledEndDatePicker = useMemo(
     () => showCompared && !compared,
     [showCompared, compared],
@@ -162,11 +163,11 @@ export const HabitRangePicker: FC<HabitRangePickerProps> = ({
       if (!current) {
         return false;
       }
-      // 当被禁用结束日期时，开始日期不能大于今天
+      // 当结束日期被禁用时，开始日期不能大于今天
       if (disabledEndDatePicker) {
         return current > dayjs().endOf('d');
       }
-      // 当结束日期存在时，开始日期不能大于结束日期
+      // 当结束日期不被禁用时，开始日期不能大于结束日期
       return range[1] && current > range[1];
     },
     [range[1], disabledEndDatePicker],
@@ -181,7 +182,7 @@ export const HabitRangePicker: FC<HabitRangePickerProps> = ({
         ((range[0] && current < range[0]) || current > dayjs().endOf('d'))
       );
     },
-    [range[0], disabledEndDatePicker],
+    [range[0]],
   );
 
   // 监听日期范围变化，更新存储的日期
