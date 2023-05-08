@@ -5,7 +5,7 @@ dependencies:
     specifier: ^5.0.1
     version: 5.0.1(react-dom@18.0.0)(react@18.0.0)
   antd:
-    specifier: '>=5.4.5'
+    specifier: ^5.4.5
     version: 5.4.7(react-dom@18.0.0)(react@18.0.0)
   dayjs:
     specifier: ^1.11.7

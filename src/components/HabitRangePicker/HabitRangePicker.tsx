@@ -81,6 +81,11 @@ export const HabitRangePicker: FC<HabitRangePickerProps> = ({
   const showCompared = useMemo(() => {
     return typeof compared === 'boolean';
   }, [compared]);
+  // 当前选择的快捷日期文本
+  // 增加这个字段是因为，比方说有两个快捷日期分别是【最近7天】【上周】
+  // 当选择了【最近7天】时，这个字段会显示【最近7天】，但是当选择了【上周】时，如果日期一样的话这个字段还是会显示【最近7天】
+  // 所以需要一个字段来存储当前选择的快捷日期文本
+  const [presetActionText, setPresetActionText] = useState<React.ReactNode>('');
 
   // 是否开启对比
   const [isCompared, setIsCompared] = useState<boolean | null>(false);
@@ -109,8 +114,8 @@ export const HabitRangePicker: FC<HabitRangePickerProps> = ({
 
   // 快捷日期文本
   const presetTextList = useMemo(() => {
+    // 当结束日期被禁用时，只显示开始日期
     if (showCompared) {
-      // 当结束日期被禁用时，只显示开始日期
       return [
         defaultPresets().find((item) =>
           dayjs(item.value[0]).isSame(value[0], 'd'),
@@ -121,6 +126,11 @@ export const HabitRangePicker: FC<HabitRangePickerProps> = ({
               dayjs(item.value[0]).isSame(value[1], 'd'),
             )?.label || showRangeString[1],
       ];
+    }
+
+    // 当选择了快捷日期时，只显示快捷日期
+    if (presetActionText) {
+      return [presetActionText, ''];
     }
 
     // 当结束日期未被禁用时，开始日期和结束日期都显示
@@ -137,7 +147,14 @@ export const HabitRangePicker: FC<HabitRangePickerProps> = ({
       commonLabel || showRangeString[0],
       commonLabel ? '' : showRangeString[1],
     ];
-  }, [value, presets, showCompared, disabledEndDatePicker, showRangeString]);
+  }, [
+    value, // 当前日期范围
+    presets, // 预设日期范围
+    showCompared, // 是否显示对比
+    disabledEndDatePicker, // 结束日期是否被禁用
+    showRangeString, // 原日期字符串
+    presetActionText, // 当前选择的快捷日期文本
+  ]);
 
   // 开始日期禁用的范围
   const disabledStartDate: RangePickerProps['disabledDate'] = useCallback(
@@ -194,6 +211,11 @@ export const HabitRangePicker: FC<HabitRangePickerProps> = ({
   const handleOk = () => {
     setPopoverOpen(false);
     onChange?.(range, rangeString, isCompared);
+    // 因为快捷日期选择与提交按钮的函数不是同一个函数
+    // 点击快捷日期的时候会设置快捷日期文本
+    // 当使用提交按钮的时候，快捷日期文本不会被清空
+    // 所以需要在这里清空
+    setPresetActionText(null);
   };
 
   // 快捷日期点击
@@ -209,6 +231,9 @@ export const HabitRangePicker: FC<HabitRangePickerProps> = ({
     setRangeString(rangeString);
     setPopoverOpen(false);
     onChange?.(item.value, rangeString, isCompared);
+    // 设置快捷日期文本
+    // 只能在这里设置
+    setPresetActionText(item?.label);
   };
 
   // 预设时间范围快捷选择列表
