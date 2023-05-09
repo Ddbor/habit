@@ -4,10 +4,9 @@ import { Button, Drawer, Input } from 'antd';
 import { ColumnSettingSortable } from './ColumnSettingSortable';
 import { HabitColumnSettingProps, HabitColumnsType } from './typing';
 import { CheckboxGroup } from './CheckboxGroup';
+import { habitColumnsCopy, habitSortColumns } from './util';
 
 const { Search } = Input;
-
-const copy = (data: HabitColumnsType[]) => data.map((item) => ({ ...item }));
 
 export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   columns,
@@ -22,15 +21,20 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   const [checkItems, setCheckItems] = useState<HabitColumnsType[]>([]);
   // 搜索选项
   const [filterTitle, setFilterTitle] = useState<string>('');
-  // 存储，
+  // 存储每次columns变化后的数据
   const saveColumns = useRef<HabitColumnsType[]>([]);
+  // 初次进入存储，用于恢复默认值
+  const initColumns = useRef<HabitColumnsType[]>([]);
 
   useEffect(() => {
     // 打开时初始化
     if (open) {
-      saveColumns.current = copy(columns);
-      setSortItems(copy(saveColumns.current));
-      setCheckItems(copy(saveColumns.current));
+      if (!initColumns.current.length) {
+        initColumns.current = habitColumnsCopy(columns);
+      }
+      saveColumns.current = habitColumnsCopy(columns);
+      setSortItems(habitSortColumns(saveColumns.current));
+      setCheckItems(saveColumns.current);
     }
   }, [open, columns]);
 
@@ -40,14 +44,27 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   };
 
   const handleCheckboxChange = (list: HabitColumnsType[]) => {
-    setSortItems(list.filter((item) => item.show));
+    setSortItems(habitSortColumns(list));
     setCheckItems(list);
   };
 
   // 恢复默认
   const handleReset = () => {
-    setSortItems(copy(saveColumns.current));
-    setCheckItems(copy(saveColumns.current));
+    setSortItems(habitSortColumns(initColumns.current));
+    setCheckItems(initColumns.current);
+  };
+
+  // 清空
+  const handleClear = () => {
+    const newData = habitColumnsCopy(saveColumns.current);
+    newData.forEach((item) => {
+      if (!item.disable) {
+        item.show = false;
+        delete item.order;
+      }
+    });
+    setSortItems(habitSortColumns(newData));
+    setCheckItems(newData);
   };
 
   const handleOk = (
@@ -118,9 +135,11 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
           <div className="habit-column-setting-right">
             <div className="habit-column-setting-right-head">
               <span className="habit-column-setting-checkbox-label">
-                已选（16项）
+                已选（{sortItems.length}项）
               </span>
-              <a className="habit-column-setting-right-a">清空</a>
+              <a className="habit-column-setting-right-a" onClick={handleClear}>
+                清空
+              </a>
               <a className="habit-column-setting-right-a" onClick={handleReset}>
                 恢复默认
               </a>
@@ -130,7 +149,7 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
             </div>
             <ColumnSettingSortable
               dataSource={sortItems}
-              onSortEnd={setSortItems}
+              onSortEnd={(data) => setSortItems(habitSortColumns(data))}
             />
           </div>
         </div>

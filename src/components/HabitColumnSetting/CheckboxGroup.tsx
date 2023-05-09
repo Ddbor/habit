@@ -3,7 +3,7 @@ import './HabitColumnSetting.css';
 import { CheckboxGroupProps, HabitColumnsType } from './typing';
 import { Checkbox, Tooltip } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { sortGroupHabitColumns } from './util';
+import { habitColumnsCopy, sortGroupHabitColumns } from './util';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 
 const questionCircleStyle = {
@@ -31,7 +31,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   >([]);
 
   useEffect(() => {
-    setItems(sortGroupHabitColumns([...dataSource]));
+    setItems(sortGroupHabitColumns(habitColumnsCopy(dataSource)));
   }, [dataSource]);
 
   // 单个选项点击
@@ -40,7 +40,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
     colItem: HabitColumnsType,
   ) => {
     const checked = e.target.checked;
-    const newDataSource = [...dataSource];
+    const newDataSource = habitColumnsCopy(dataSource);
     const actionIndex = newDataSource.findIndex(
       (item) => item.key === colItem.key,
     );

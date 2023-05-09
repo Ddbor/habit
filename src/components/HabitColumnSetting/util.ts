@@ -52,3 +52,10 @@ export const habitSortColumns = (columns: HabitColumnsType[]) => {
     .filter((item) => item.show)
     .sort((a, b) => getOrderValue(a) - getOrderValue(b));
 };
+
+// 只做 HabitColumnsType 的copy
+export const habitColumnsCopy = (
+  data: HabitColumnsType[],
+): HabitColumnsType[] => {
+  return data.map((item) => ({ ...item }));
+};
