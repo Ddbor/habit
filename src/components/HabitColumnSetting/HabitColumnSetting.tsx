@@ -11,6 +11,7 @@ const { Search } = Input;
 export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   columns,
   open,
+  max,
   onOk,
   ...rest
 }) => {
@@ -30,10 +31,10 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
     // 打开时初始化
     if (open) {
       if (!initColumns.current.length) {
-        initColumns.current = habitColumnsCopy(columns);
+        initColumns.current = columns;
       }
-      saveColumns.current = habitColumnsCopy(columns);
-      setSortItems(habitSortColumns(saveColumns.current));
+      saveColumns.current = columns;
+      setSortItems(habitSortColumns(habitColumnsCopy(saveColumns.current)));
       setCheckItems(saveColumns.current);
     }
   }, [open, columns]);
@@ -50,7 +51,7 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
 
   // 恢复默认
   const handleReset = () => {
-    setSortItems(habitSortColumns(initColumns.current));
+    setSortItems(habitSortColumns(habitColumnsCopy(initColumns.current)));
     setCheckItems(initColumns.current);
   };
 
@@ -126,6 +127,8 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
             </div>
             <div className="habit-column-setting-left-cont">
               <CheckboxGroup
+                max={max}
+                sortColumns={sortItems}
                 dataSource={checkItems}
                 filterTitle={filterTitle}
                 onChange={handleCheckboxChange}
@@ -135,7 +138,7 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
           <div className="habit-column-setting-right">
             <div className="habit-column-setting-right-head">
               <span className="habit-column-setting-checkbox-label">
-                已选（{sortItems.length}项）
+                已选（{sortItems.length} {max ? `/${max}` : null}）项
               </span>
               <a className="habit-column-setting-right-a" onClick={handleClear}>
                 清空

@@ -28,6 +28,7 @@ export type ColumnsCustomType = {
   properties: ColumnsPropertiesType;
   description?: string; // 列描述
   order?: number; // 排序
+  [key: string]: any;
 };
 
 export type HabitColumnsType = (ColumnsType | ProColumns) & ColumnsCustomType;
@@ -44,6 +45,7 @@ export type HabitColumnSettingProps = DrawerProps & {
   persistenceType?: 'localStorage' | 'sessionStorage';
   /** 持久化的key，用于存储到 storage 中 */
   persistenceKey?: string;
+  max?: number; // 最大值，不传则不限制
   onOk?: (newColumns: HabitColumnsType[]) => void;
 };
 
@@ -53,6 +55,8 @@ export type ColumnSettingSortableProps = {
 };
 
 export type CheckboxGroupProps = {
+  max?: number; // 最大值，不传则不限制
+  sortColumns?: HabitColumnsType[]; // 是否排序
   dataSource: HabitColumnsType[]; // 表格列配置
   filterTitle?: string; // 过滤标题
   onChange?: (data: HabitColumnsType[]) => void; // 选择回调

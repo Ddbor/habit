@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './HabitColumnSetting.css';
 import { CheckboxGroupProps, HabitColumnsType } from './typing';
 import { Checkbox, Tooltip } from 'antd';
@@ -14,6 +14,14 @@ const questionCircleStyle = {
   verticalAlign: 'middle',
 };
 
+const groupChecked = (columns: HabitColumnsType[]) => {
+  return columns.every((item) => item.show);
+};
+
+const goupIndeterminate = (columns: HabitColumnsType[]) => {
+  return columns.some((item) => item.show) && !groupChecked(columns);
+};
+
 const handleFilterTitle = (title: React.ReactNode, filterTitle?: string) => {
   if (!filterTitle || typeof title !== 'string') {
     return false;
@@ -24,47 +32,65 @@ const handleFilterTitle = (title: React.ReactNode, filterTitle?: string) => {
 export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   dataSource,
   filterTitle,
+  max = Infinity,
+  sortColumns = [],
   onChange,
 }) => {
   const [items, setItems] = useState<
     { columns: HabitColumnsType[]; groupOrder: number; groupName: string }[]
   >([]);
+  // 禁用全部可选择项，一般是因为到达最大限度了
+  const disableAll = useMemo(
+    () => sortColumns.length >= max,
+    [max, sortColumns],
+  );
 
   useEffect(() => {
     setItems(sortGroupHabitColumns(habitColumnsCopy(dataSource)));
   }, [dataSource]);
 
-  // 单个选项点击
-  const handleItemChecked = (
+  const genNewDataSource = (
     e: CheckboxChangeEvent,
-    colItem: HabitColumnsType,
+    columns: HabitColumnsType[],
   ) => {
     const checked = e.target.checked;
     const newDataSource = habitColumnsCopy(dataSource);
-    const actionIndex = newDataSource.findIndex(
-      (item) => item.key === colItem.key,
-    );
-    newDataSource[actionIndex].show = checked;
-    // 不显示了，移除排序字段
-    if (!checked) {
-      delete newDataSource[actionIndex].order;
-    }
+    let count = sortColumns.length;
+    columns.forEach((item) => {
+      if ((checked && count >= max) || item?.disable) {
+        return;
+      }
+      const actionIndex = newDataSource.findIndex(
+        (colItem) => colItem.key === item.key,
+      );
+      newDataSource[actionIndex].show = checked;
+      // 不显示了，移除排序字段
+      if (!checked) {
+        delete newDataSource[actionIndex].order;
+      } else {
+        count++;
+      }
+    });
     onChange?.(newDataSource);
   };
 
   return (
     <>
-      {items.map((item, groupIndex) => (
+      {items.map((group, groupIndex) => (
         <div key={groupIndex.toString()}>
           <div className="habit-column-setting-left-cont-title">
-            <Checkbox>
+            <Checkbox
+              indeterminate={goupIndeterminate(group.columns)}
+              checked={groupChecked(group.columns)}
+              onChange={(e) => genNewDataSource(e, group.columns)}
+            >
               <span className="habit-column-setting-checkbox-label">
-                {item.groupName}
+                {group.groupName}
               </span>
             </Checkbox>
           </div>
           <div className="habit-column-setting-checkbox-list clearfix">
-            {item.columns.map((colItem) => (
+            {group.columns.map((colItem) => (
               <div
                 key={colItem.key}
                 className={`habit-column-setting-checkbox-item ${
@@ -75,8 +101,8 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
               >
                 <Checkbox
                   checked={colItem.show}
-                  disabled={colItem.disable}
-                  onChange={(e) => handleItemChecked(e, colItem)}
+                  disabled={colItem.disable || (disableAll && !colItem.show)}
+                  onChange={(e) => genNewDataSource(e, [colItem])}
                 >
                   <span className="habit-column-setting-checkbox-label">
                     {colItem?.title}
