@@ -54,7 +54,8 @@
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "antd": "^5.4.5",
-    "dayjs": "^1.11.7"
+    "dayjs": "^1.11.7",
+    "react-sortable-hoc": "^2.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",

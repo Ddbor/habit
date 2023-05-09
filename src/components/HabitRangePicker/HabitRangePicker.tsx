@@ -8,13 +8,7 @@ import {
   PopoverProps,
   Switch,
 } from 'antd';
-import React, {
-  useCallback,
-  type FC,
-  useState,
-  useEffect,
-  useMemo,
-} from 'react';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import './HabitRangePicker.css';
 import dayjs, { Dayjs } from 'dayjs';
 import { RangePickerProps } from 'antd/es/date-picker';
@@ -52,7 +46,7 @@ export type HabitRangePickerProps = {
   ) => void; // 日期范围发生变化的回调
 };
 
-export const HabitRangePicker: FC<HabitRangePickerProps> = ({
+export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
   value,
   popoverProps,
   buttonProps,
@@ -274,12 +268,12 @@ export const HabitRangePicker: FC<HabitRangePickerProps> = ({
         trigger="click"
         placement="bottom"
         open={popoverOpen}
-        onOpenChange={handlePopoverOpenChange}
         getPopupContainer={(triggerNode) => triggerNode}
         overlayInnerStyle={{
           padding: 0,
         }}
         {...popoverProps}
+        onOpenChange={handlePopoverOpenChange}
         content={
           <div className="habit-range-picker-popover-content">
             <div className="habit-range-picker-popover-head">
