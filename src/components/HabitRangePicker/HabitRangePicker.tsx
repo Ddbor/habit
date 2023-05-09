@@ -92,7 +92,7 @@ export const HabitRangePicker: FC<HabitRangePickerProps> = ({
   // 设置全新的对比开关状态
   useEffect(() => {
     setIsCompared(showCompared ? compared! : null);
-  }, [compared]);
+  }, [compared, popoverOpen]);
 
   // 禁用结束日期选项
   // 当选择了对比开关时，结束日期选项会被禁用
