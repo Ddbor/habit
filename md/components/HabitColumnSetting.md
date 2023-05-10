@@ -419,6 +419,307 @@ export default () => {
 };
 ```
 
+## 与 [Ant Design Table](https://ant-design.antgroup.com/components/table-cn) 一起使用
+
+```tsx
+import React, { useState, useMemo } from 'react';
+import { Space, Table, Tag, Button } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+import { SettingOutlined } from '@ant-design/icons';
+import { HabitColumnSetting, habitSortColumns } from '@ddbor/habit';
+
+interface DataType {
+  key: string;
+  name: string;
+  age: number;
+  address: string;
+  tags: string[];
+}
+
+const listOfColumns: ColumnsType<DataType> = [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name',
+    show: true,
+    properties: {
+      groupOrder: 1,
+      groupName: '基本信息',
+    },
+    render: (text) => <a>{text}</a>,
+  },
+  {
+    title: 'Age',
+    dataIndex: 'age',
+    key: 'age',
+    show: true,
+    properties: {
+      groupOrder: 1,
+      groupName: '基本信息',
+    },
+  },
+  {
+    title: 'Address',
+    dataIndex: 'address',
+    key: 'address',
+    show: true,
+    properties: {
+      groupOrder: 1,
+      groupName: '基本信息',
+    },
+  },
+  {
+    title: 'Tags',
+    key: 'tags',
+    dataIndex: 'tags',
+    show: true,
+    properties: {
+      groupOrder: 1,
+      groupName: '基本信息',
+    },
+    render: (_, { tags }) => (
+      <>
+        {tags.map((tag) => {
+          let color = tag.length > 5 ? 'geekblue' : 'green';
+          if (tag === 'loser') {
+            color = 'volcano';
+          }
+          return (
+            <Tag color={color} key={tag}>
+              {tag.toUpperCase()}
+            </Tag>
+          );
+        })}
+      </>
+    ),
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    disable: true,
+    show: true,
+    properties: {
+      groupOrder: 2,
+      groupName: '操作',
+    },
+    render: (_, record) => (
+      <Space size="middle">
+        <a>Invite {record.name}</a>
+        <a>Delete</a>
+      </Space>
+    ),
+  },
+];
+
+const data: DataType[] = [
+  {
+    key: '1',
+    name: 'John Brown',
+    age: 32,
+    address: 'New York No. 1 Lake Park',
+    tags: ['nice', 'developer'],
+  },
+  {
+    key: '2',
+    name: 'Jim Green',
+    age: 42,
+    address: 'London No. 1 Lake Park',
+    tags: ['loser'],
+  },
+  {
+    key: '3',
+    name: 'Joe Black',
+    age: 32,
+    address: 'Sydney No. 1 Lake Park',
+    tags: ['cool', 'teacher'],
+  },
+];
+
+const App: React.FC = () => {
+  const [visible, setVisible] = useState(false);
+  const [columns, setColumns] = useState(listOfColumns);
+  const showColumns = useMemo(() => habitSortColumns(columns), [columns]);
+
+  return (
+    <>
+      <Button
+        style={{ marginBottom: '24px' }}
+        type="default"
+        icon={<SettingOutlined />}
+        onClick={() => setVisible(true)}
+      />
+      <HabitColumnSetting
+        open={visible}
+        onClose={() => setVisible(false)}
+        columns={columns}
+        onOk={(newColumns) => {
+          setColumns(newColumns);
+        }}
+      />
+      <Table columns={showColumns} dataSource={data} />
+    </>
+  );
+};
+
+export default App;
+```
+
+## 与 [ProComponents Table](https://procomponents.ant.design/components/table) 一起使用
+
+```tsx
+import { DownOutlined, SettingOutlined } from '@ant-design/icons';
+import type { ProColumns } from '@ant-design/pro-components';
+import { ProTable } from '@ant-design/pro-components';
+import { Button } from 'antd';
+import { useState, useMemo } from 'react';
+import { HabitColumnSetting, habitSortColumns } from '@ddbor/habit';
+
+const valueEnum = {
+  0: 'close',
+  1: 'running',
+  2: 'online',
+  3: 'error',
+};
+
+type TableListItem = {
+  key: number;
+  name: string;
+  containers: number;
+  creator: string;
+  status: string;
+  createdAt: number;
+  memo: string;
+};
+const tableListDataSource: TableListItem[] = [];
+
+const creators = ['付小小', '曲丽丽', '林东东', '陈帅帅', '兼某某'];
+
+for (let i = 0; i < 5; i += 1) {
+  tableListDataSource.push({
+    key: i,
+    name: 'AppName',
+    containers: Math.floor(Math.random() * 20),
+    creator: creators[Math.floor(Math.random() * creators.length)],
+    status: valueEnum[Math.floor(Math.random() * 10) % 4],
+    createdAt: Date.now() - Math.floor(Math.random() * 100000),
+    memo:
+      i % 2 === 1
+        ? '很长很长很长很长很长很长很长的文字要展示但是要留下尾巴'
+        : '简短备注文案',
+  });
+}
+
+const listOfColumns: ProColumns<TableListItem>[] = [
+  {
+    title: '应用名称',
+    dataIndex: 'name',
+    key: 'name',
+    show: true,
+    properties: {
+      groupOrder: 1,
+      groupName: '基本信息',
+    },
+    render: (_) => <a>{_}</a>,
+  },
+  {
+    title: '容器数量',
+    dataIndex: 'containers',
+    key: 'containers',
+    show: true,
+    properties: {
+      groupOrder: 1,
+      groupName: '基本信息',
+    },
+    sorter: (a, b) => a.containers - b.containers,
+  },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    initialValue: 'all',
+    show: true,
+    properties: {
+      groupOrder: 1,
+      groupName: '基本信息',
+    },
+    valueEnum: {
+      all: { text: '全部', status: 'Default' },
+      close: { text: '关闭', status: 'Default' },
+      running: { text: '运行中', status: 'Processing' },
+      online: { text: '已上线', status: 'Success' },
+      error: { text: '异常', status: 'Error' },
+    },
+  },
+  {
+    title: '创建时间',
+    tooltip: '这是一段描述',
+    key: 'since',
+    show: true,
+    properties: {
+      groupOrder: 1,
+      groupName: '基本信息',
+    },
+    hideInSearch: true,
+    dataIndex: 'createdAt',
+    valueType: 'date',
+    sorter: (a, b) => a.createdAt - b.createdAt,
+  },
+];
+
+export default () => {
+  const [visible, setVisible] = useState(false);
+  const [columns, setColumns] = useState(listOfColumns);
+  const showColumns = useMemo(() => habitSortColumns(columns), [columns]);
+
+  return (
+    <>
+      <HabitColumnSetting
+        open={visible}
+        onClose={() => setVisible(false)}
+        columns={columns}
+        onOk={(newColumns) => {
+          setColumns(newColumns);
+        }}
+      />
+      <ProTable<TableListItem>
+        columns={showColumns}
+        request={(params, sorter, filter) => {
+          // 表单搜索项会从 params 传入，传递给后端接口。
+          console.log(params, sorter, filter);
+          return Promise.resolve({
+            data: tableListDataSource,
+            success: true,
+          });
+        }}
+        rowKey="key"
+        pagination={{
+          showQuickJumper: true,
+        }}
+        search={{
+          optionRender: false,
+          collapsed: false,
+        }}
+        dateFormatter="string"
+        headerTitle="表格标题"
+        toolbar={{
+          settings: [<SettingOutlined onClick={() => setVisible(true)} />],
+        }}
+        toolBarRender={() => [
+          <Button key="show">查看日志</Button>,
+          <Button key="out">
+            导出数据
+            <DownOutlined />
+          </Button>,
+          <Button type="primary" key="primary">
+            创建应用
+          </Button>,
+        ]}
+      />
+    </>
+  );
+};
+```
+
 ## API
 
 | 参数 | 说明 | 类型 | 默认值 |
