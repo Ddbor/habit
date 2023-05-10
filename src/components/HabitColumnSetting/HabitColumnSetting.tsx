@@ -1,8 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import './HabitColumnSetting.css';
 import { Button, Drawer, Input } from 'antd';
 import { ColumnSettingSortable } from './ColumnSettingSortable';
-import { HabitColumnSettingProps, HabitColumnsType } from './typing';
+import {
+  HabitColumnSettingProps,
+  HabitColumnsType,
+  StorageColumnsType,
+} from './typing';
 import { CheckboxGroup } from './CheckboxGroup';
 import { habitColumnsCopy, habitSortColumns } from './util';
 
@@ -13,6 +23,8 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   open,
   max,
   onOk,
+  persistenceKey,
+  persistenceType,
   ...rest
 }) => {
   const { onClose } = rest;
@@ -26,18 +38,109 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   const saveColumns = useRef<HabitColumnsType[]>([]);
   // 初次进入存储，用于恢复默认值
   const initColumns = useRef<HabitColumnsType[]>([]);
+  // 是否应该进行初次进入的操作，默认为true
+  const isInit = useRef(true);
+  const noStorage = useMemo(
+    () => !persistenceKey || !persistenceType || typeof window === 'undefined',
+    [persistenceKey, persistenceType],
+  );
+
+  // 使用本地持久存储中的数据设置columns
+  const genColumnsByStorage = useCallback(
+    (data: HabitColumnsType[]) => {
+      if (noStorage) {
+        return data;
+      }
+      const storage = window[persistenceType!];
+      try {
+        const storageString = storage?.getItem(persistenceKey!);
+        if (storageString) {
+          const storageData: StorageColumnsType = JSON.parse(storageString);
+          const habitColumns = habitColumnsCopy(data);
+          habitColumns.forEach((item) => {
+            item.show = storageData?.[item.key]?.show ?? item.show;
+            item.order = storageData?.[item.key]?.order ?? item.order;
+          });
+          return habitColumns;
+        }
+      } catch (error) {
+        console.warn(error);
+      }
+
+      return data;
+    },
+    [persistenceKey, persistenceType, noStorage],
+  );
+
+  // 设置本地存储
+  const setStorageByColumns = useCallback(
+    (data: HabitColumnsType[]) => {
+      if (noStorage) {
+        return;
+      }
+      const storage = window[persistenceType!];
+      try {
+        const storageData = data.reduce((obj: StorageColumnsType, item) => {
+          obj[item.key] = {
+            show: item.show,
+            order: item.order,
+          };
+          return obj;
+        }, {});
+        storage?.setItem(persistenceKey!, JSON.stringify(storageData));
+      } catch (error) {
+        console.warn(error);
+      }
+    },
+    [persistenceKey, persistenceType, noStorage],
+  );
+
+  const genNewColumns = (
+    allColumns: HabitColumnsType[],
+    sortColumns: HabitColumnsType[],
+  ) => {
+    return allColumns.map((item) => {
+      const sortInfo = sortColumns.find((v) => v.key === item.key);
+      const obj = {
+        ...item,
+        show: !!sortInfo,
+      };
+
+      if (sortInfo) {
+        obj.order = sortInfo.order;
+      }
+
+      return obj;
+    });
+  };
 
   useEffect(() => {
-    // 打开时初始化
     if (open) {
-      if (!initColumns.current.length) {
-        initColumns.current = columns;
+      let habitColumns = columns;
+      if (isInit.current) {
+        habitColumns = genColumnsByStorage(habitColumns);
+        initColumns.current = habitColumns;
+        isInit.current = false;
       }
-      saveColumns.current = columns;
+      saveColumns.current = habitColumns;
       setSortItems(habitSortColumns(habitColumnsCopy(saveColumns.current)));
       setCheckItems(saveColumns.current);
     }
   }, [open, columns]);
+
+  useEffect(() => {
+    // 初次进入并且使用持久化存储，调用一次 onOk
+    // 这时应该还没有打开抽屉，但是组件已经挂载
+    if (!open && isInit.current && !noStorage) {
+      const habitColumns = genColumnsByStorage(columns);
+      onOk?.(
+        genNewColumns(
+          habitColumns,
+          habitSortColumns(habitColumnsCopy(habitColumns)),
+        ),
+      );
+    }
+  }, [isInit.current, noStorage, open, columns]);
 
   // 搜索提交
   const handleOnSearch = (value: string) => {
@@ -71,19 +174,8 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   const handleOk = (
     e: React.MouseEvent<Element, MouseEvent> | React.KeyboardEvent<Element>,
   ) => {
-    const newColumns = saveColumns.current.map((item) => {
-      const sortInfo = sortItems.find((v) => v.key === item.key);
-      const obj = {
-        ...item,
-        show: !!sortInfo,
-      };
-
-      if (sortInfo) {
-        obj.order = sortInfo.order;
-      }
-
-      return obj;
-    });
+    const newColumns = genNewColumns(saveColumns.current, sortItems);
+    setStorageByColumns(newColumns);
     onOk?.(newColumns);
     onClose?.(e);
   };

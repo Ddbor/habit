@@ -61,3 +61,7 @@ export type CheckboxGroupProps = {
   filterTitle?: string; // 过滤标题
   onChange?: (data: HabitColumnsType[]) => void; // 选择回调
 };
+
+export type StorageColumnsType = {
+  [key: string]: { show: boolean; order?: number };
+};
