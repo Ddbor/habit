@@ -722,7 +722,47 @@ export default () => {
 
 ## API
 
-| 参数 | 说明 | 类型 | 默认值 |
-| ---- | ---- | ---- | ------ |
+| 参数              | 说明                                              | 类型                                                                      | 默认值 |
+| ----------------- | ------------------------------------------------- | ------------------------------------------------------------------------- | ------ |
+| `columns`         | 列配置                                            | [HabitColumnsType](/components/habit-column-setting#habitcolumnstype)`[]` | -      |
+| `persistenceType` | 持久化的类型，支持 localStorage 和 sessionStorage | `'localStorage' \| 'sessionStorage'`                                      | -      |
+| `persistenceKey`  | 持久化的 key，用于存储到 storage 中               | `string`                                                                  | -      |
+| `max`             | 最大值，不传则不限制                              | `number`                                                                  | -      |
+| `onOk`            | 点击确定，或者使用持久化存储时组件挂载时触发      | `(newColumns: HabitColumnsType[]) => void`                                | -      |
 
-更多属性参考[Drawer 抽屉 API](https://ant-design.antgroup.com/components/drawer-cn#api)
+### ColumnsPropertiesType
+
+```tsx | pure
+export type ColumnsPropertiesType = {
+  groupOrder: number; // 分组排序
+  groupName: string; // 分组名称
+};
+```
+
+### ColumnsCustomType
+
+```tsx | pure
+export type ColumnsCustomType = {
+  /** 是否展示列，默认展示 */
+  show: boolean;
+  /** 列设置中 disabled 的状态 */
+  disable?: boolean;
+  /** 列头显示文字 */
+  title: React.ReactNode;
+  /** React 需要的 key */
+  key: string;
+  properties: ColumnsPropertiesType;
+  description?: string; // 列描述
+  order?: number; // 排序
+  [key: string]: any;
+};
+```
+
+### HabitColumnsType
+
+[ColumnsType](https://ant-design.antgroup.com/components/table-cn#column)
+[ProColumns](https://procomponents.ant.design/components/table#columns-%E5%88%97%E5%AE%9A%E4%B9%89)
+
+```tsx | pure
+export type HabitColumnsType = (ColumnsType | ProColumns) & ColumnsCustomType;
+```

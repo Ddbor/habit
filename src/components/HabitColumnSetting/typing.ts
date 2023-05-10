@@ -5,15 +5,6 @@ import { ColumnsType } from 'antd/es/table';
 export type ColumnsPropertiesType = {
   groupOrder: number; // 分组排序
   groupName: string; // 分组名称
-  unit?: string; // 单位
-  /**
-   * 格式化的类型
-   * 有：
-   * formatFloat：保留小数点后几位
-   * formatInt：保留整数位
-   * formatPer：保留百分比
-   */
-  formater?: string;
 };
 
 export type ColumnsCustomType = {
@@ -46,6 +37,7 @@ export type HabitColumnSettingProps = DrawerProps & {
   /** 持久化的key，用于存储到 storage 中 */
   persistenceKey?: string;
   max?: number; // 最大值，不传则不限制
+  // 提交回调
   onOk?: (newColumns: HabitColumnsType[]) => void;
 };
 
