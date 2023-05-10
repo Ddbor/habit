@@ -7,7 +7,15 @@ import { habitColumnsCopy } from './util';
 
 const SortableItemComponent = SortableElement<{ value: HabitColumnsType }>(
   ({ value }: { value: HabitColumnsType }) => (
-    <div className="habit-column-setting-drag-item">{<>{value?.title}</>}</div>
+    <div
+      className="habit-column-setting-drag-item"
+      style={{
+        backgroundImage:
+          'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAUCAYAAACEYr13AAAAt0lEQVR4Ae3BQQ3EMAxE0d8MDRMKEUtGFMlESig0RtoiaA697ntXVU3bzUNSrrVuXlTVtN08JOWw3UAAYbs5sN1AAGG7Bx8NSQlsYEtKDiQlsIEtKfnjqqppu3lIyrXWzYuqmrabh6QcthsIIGw3B7YbCCBs9+CjISmBDWxJyYGkBDawJSV/XFU1bTcPSbnWunlRVdN285CUw3YDAYTt5sB2AwGE7R58NCQlsIEtKTmQlMAGtqT8AT13ZKKS1qIVAAAAAElFTkSuQmCC")',
+      }}
+    >
+      {<>{value?.title}</>}
+    </div>
   ),
 );
 
