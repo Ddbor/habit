@@ -766,3 +766,38 @@ export type ColumnsCustomType = {
 ```tsx | pure
 export type HabitColumnsType = (ColumnsType | ProColumns) & ColumnsCustomType;
 ```
+
+## Method
+
+### groupHabitColumns
+
+```tsx | pure
+/**
+ * 对表格列进行分组
+ * @param columns
+ * @returns
+ */
+export const groupHabitColumns = (columns: HabitColumnsType[]) => {};
+```
+
+### sortGroupHabitColumns
+
+```tsx | pure
+/**
+ * 对分组后的数据进行排序
+ * @param columns
+ * @returns
+ */
+export const sortGroupHabitColumns = (columns: HabitColumnsType[]) => {};
+```
+
+### habitSortColumns
+
+```tsx | pure
+/**
+ * 获取排序后展示在页面上的字段列表
+ * @param columns
+ * @returns
+ */
+export const habitSortColumns = (columns: HabitColumnsType[]) => {};
+```
