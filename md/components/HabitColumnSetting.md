@@ -764,7 +764,11 @@ export type ColumnsCustomType = {
 [ProColumns](https://procomponents.ant.design/components/table#columns-%E5%88%97%E5%AE%9A%E4%B9%89)
 
 ```tsx | pure
-export type HabitColumnsType = (ColumnsType | ProColumns) & ColumnsCustomType;
+export type HabitColumnsType<T = any, ValueType = 'text'> = (
+  | ColumnsType<T>
+  | ProColumns<T, ValueType>
+) &
+  ColumnsCustomType;
 ```
 
 ## Method
