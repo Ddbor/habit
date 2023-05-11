@@ -22,7 +22,11 @@ export type ColumnsCustomType = {
   [key: string]: any;
 };
 
-export type HabitColumnsType = (ColumnsType | ProColumns) & ColumnsCustomType;
+export type HabitColumnsType<T = any, ValueType = 'text'> = (
+  | ColumnsType<T>
+  | ProColumns<T, ValueType>
+) &
+  ColumnsCustomType;
 
 export type HabitColumnSettingProps = DrawerProps & {
   /** 列配置 */
