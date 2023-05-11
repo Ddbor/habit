@@ -765,7 +765,8 @@ export type ColumnsCustomType = {
 
 ```tsx | pure
 export type HabitColumnsType<T = any, ValueType = 'text'> = (
-  | ColumnsType<T>
+  | ColumnGroupType<T>
+  | ColumnType<T>
   | ProColumns<T, ValueType>
 ) &
   ColumnsCustomType;

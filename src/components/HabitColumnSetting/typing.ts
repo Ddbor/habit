@@ -1,6 +1,6 @@
 import { ProColumns } from '@ant-design/pro-components';
 import { DrawerProps } from 'antd';
-import { ColumnsType } from 'antd/es/table';
+import { ColumnGroupType, ColumnType } from 'antd/es/table';
 
 export type ColumnsPropertiesType = {
   groupOrder: number; // 分组排序
@@ -23,7 +23,8 @@ export type ColumnsCustomType = {
 };
 
 export type HabitColumnsType<T = any, ValueType = 'text'> = (
-  | ColumnsType<T>
+  | ColumnGroupType<T>
+  | ColumnType<T>
   | ProColumns<T, ValueType>
 ) &
   ColumnsCustomType;
