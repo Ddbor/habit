@@ -736,6 +736,16 @@ export default () => {
 export type ColumnsPropertiesType = {
   groupOrder: number; // 分组排序
   groupName: string; // 分组名称
+  prefix?: string; // 设置数值的前缀
+  suffix?: string; // 设置数值的后缀
+  /**
+   * 格式化的类型
+   * 有：
+   * formatInt：保留整数位
+   * formatFloat：保留两位小数点，如果想要保留多位小数点，可以在后面加上数字，例如：formatFloat2
+   * formatPer：保留百分比，默认保留两位小数点，如果想要保留多位小数点，可以在后面加上数字，例如：formatPer2
+   */
+  formater?: string;
 };
 ```
 
