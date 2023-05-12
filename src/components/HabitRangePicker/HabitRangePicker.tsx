@@ -86,13 +86,21 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
   // 设置全新的对比开关状态
   useEffect(() => {
     setIsCompared(showCompared ? compared! : null);
-  }, [compared, popoverOpen]);
+  }, [compared, showCompared]);
 
   // 禁用结束日期选项
   // 当选择了对比开关时，结束日期选项会被禁用
+  // 负责用户提交后的状态处理
   const disabledEndDatePicker = useMemo(
     () => showCompared && !compared,
     [showCompared, compared],
+  );
+
+  // 打开时结束日期禁用状态
+  // 负责用户正在操作时的状态处理
+  const disabledEndDatePickerWhenOpen = useMemo(
+    () => showCompared && !isCompared,
+    [showCompared, isCompared],
   );
 
   // 下拉图片旋转角度
@@ -158,13 +166,13 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
         return false;
       }
       // 当结束日期被禁用时，开始日期不能大于今天
-      if (disabledEndDatePicker) {
+      if (disabledEndDatePickerWhenOpen) {
         return current > dayjs().endOf('d');
       }
       // 当结束日期不被禁用时，开始日期不能大于结束日期
       return range[1] && current > range[1];
     },
-    [range[1], disabledEndDatePicker],
+    [range[1], disabledEndDatePickerWhenOpen],
   );
 
   // 结束日期禁用的范围
@@ -311,8 +319,8 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
                   value={range[1]}
                   disabledDate={disabledEndDate}
                   onChange={handleEndChange}
-                  disabled={disabledEndDatePicker}
                   {...endDatePickerProps}
+                  disabled={disabledEndDatePickerWhenOpen}
                 />
               </div>
             </div>

@@ -3,10 +3,14 @@ import { DrawerProps } from 'antd';
 import { ColumnGroupType, ColumnType } from 'antd/es/table';
 
 export type ColumnsPropertiesType = {
-  groupOrder: number; // 分组排序
-  groupName: string; // 分组名称
-  prefix?: string; // 数值的前缀
-  suffix?: string; // 数值的后缀
+  /** 分组排序 */
+  groupOrder: number;
+  /** 分组名称 */
+  groupName: string;
+  /** 数值的前缀 */
+  prefix?: string;
+  /** 数值的后缀 */
+  suffix?: string;
   /**
    * 格式化的类型
    * 有：
@@ -27,8 +31,10 @@ export type ColumnsCustomType = {
   /** React 需要的 key */
   key: string;
   properties: ColumnsPropertiesType;
-  description?: string; // 列描述
-  order?: number; // 排序
+  /** 列描述 */
+  description?: string;
+  /** 排序 */
+  order?: number;
   [key: string]: any;
 };
 
@@ -51,8 +57,9 @@ export type HabitColumnSettingProps = DrawerProps & {
   persistenceType?: 'localStorage' | 'sessionStorage';
   /** 持久化的key，用于存储到 storage 中 */
   persistenceKey?: string;
-  max?: number; // 最大值，不传则不限制
-  // 提交回调
+  /** 最大值，不传则不限制 */
+  max?: number;
+  /** 提交回调 */
   onOk?: (newColumns: HabitColumnsType[]) => void;
 };
 
