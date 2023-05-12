@@ -1,11 +1,13 @@
-import { HabitColumnsType } from './typing';
+import { HabitColumnsType, HabitGroupColumnsType } from './typing';
 
 /**
  * 对表格列进行分组
  * @param columns
  * @returns
  */
-export const groupHabitColumns = (columns: HabitColumnsType[]) => {
+export const groupHabitColumns = (
+  columns: HabitColumnsType[],
+): { [key: string]: HabitGroupColumnsType } => {
   return columns.reduce((acc: { [key: string]: any }, curr) => {
     const groupName = curr.properties.groupName;
     const groupOrder = curr.properties.groupOrder;
@@ -29,7 +31,9 @@ export const groupHabitColumns = (columns: HabitColumnsType[]) => {
  * @param columns
  * @returns
  */
-export const sortGroupHabitColumns = (columns: HabitColumnsType[]) => {
+export const sortGroupHabitColumns = (
+  columns: HabitColumnsType[],
+): HabitGroupColumnsType[] => {
   return Object.values(groupHabitColumns(columns)).sort(
     (a, b) => a.groupOrder - b.groupOrder,
   );

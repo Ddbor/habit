@@ -782,6 +782,16 @@ export type HabitColumnsType<T = any, ValueType = 'text'> = (
   ColumnsCustomType;
 ```
 
+### HabitGroupColumnsType
+
+```tsx | pure
+export type HabitGroupColumnsType = {
+  groupOrder: number;
+  groupName: string;
+  columns: HabitColumnsType[];
+};
+```
+
 ## Method
 
 ### groupHabitColumns

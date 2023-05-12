@@ -79,3 +79,9 @@ export type CheckboxGroupProps = {
 export type StorageColumnsType = {
   [key: string]: { show: boolean; order?: number };
 };
+
+export type HabitGroupColumnsType = {
+  groupOrder: number;
+  groupName: string;
+  columns: HabitColumnsType[];
+};
