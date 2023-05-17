@@ -37,9 +37,9 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   // 存储每次columns变化后的数据
   const saveColumns = useRef<HabitColumnsType[]>([]);
   // 初次进入存储，用于恢复默认值
-  const initColumns = useRef<HabitColumnsType[]>([]);
+  const [initColumns, setInitColumns] = useState<HabitColumnsType[]>([]);
   // 是否应该进行初次进入的操作，默认为true
-  const isInit = useRef(true);
+  const [isInit, setIsInit] = useState(true);
   const noStorage = useMemo(
     () => !persistenceKey || !persistenceType || typeof window === 'undefined',
     [persistenceKey, persistenceType],
@@ -117,12 +117,8 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   useEffect(() => {
     if (open) {
       let habitColumns = columns;
-      if (isInit.current) {
-        habitColumns = genColumnsByStorage(habitColumns);
-        initColumns.current = habitColumns;
-        isInit.current = false;
-      }
       saveColumns.current = habitColumns;
+      setIsInit(false);
       setSortItems(habitSortColumns(habitColumnsCopy(saveColumns.current)));
       setCheckItems(saveColumns.current);
     }
@@ -131,8 +127,10 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   useEffect(() => {
     // 初次进入并且使用持久化存储，调用一次 onOk
     // 这时应该还没有打开抽屉，但是组件已经挂载
-    if (!open && isInit.current && !noStorage) {
+    if (!open && isInit && !noStorage) {
       const habitColumns = genColumnsByStorage(columns);
+      setInitColumns(habitColumns);
+      setIsInit(false);
       onOk?.(
         genNewColumns(
           habitColumns,
@@ -140,7 +138,7 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
         ),
       );
     }
-  }, [isInit.current, noStorage, open, columns]);
+  }, [isInit, noStorage, open, columns]);
 
   // 搜索提交
   const handleOnSearch = (value: string) => {
@@ -154,8 +152,8 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
 
   // 恢复默认
   const handleReset = () => {
-    setSortItems(habitSortColumns(habitColumnsCopy(initColumns.current)));
-    setCheckItems(initColumns.current);
+    setSortItems(habitSortColumns(habitColumnsCopy(initColumns)));
+    setCheckItems(initColumns);
   };
 
   // 清空
