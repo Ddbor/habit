@@ -1,0 +1,17 @@
+.habit-multiple-select-search {
+  margin-bottom: 12px;
+}
+
+.habit-multiple-select-button {
+  min-width: 140px;
+}
+
+.habit-multiple-select-button-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.habit-multiple-select-icon {
+  margin-left: 8px;
+}
