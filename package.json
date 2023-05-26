@@ -1,6 +1,6 @@
 {
   "name": "@ddbor/habit",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "根据平时习惯二次封装的 React Ant Design",
   "homepage": "https://ddbor.github.io/habit/",
   "bugs": {
@@ -52,7 +52,7 @@
     ]
   },
   "dependencies": {
-    "@ant-design/icons": "^5.1.0",
+    "@ant-design/icons": "^5.1.2",
     "@ant-design/pro-components": "^2.4.16",
     "antd": "^5.5.0",
     "dayjs": "^1.11.7",

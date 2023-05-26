@@ -169,6 +169,10 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
       if (disabledEndDatePickerWhenOpen) {
         return current > dayjs().endOf('d');
       }
+      // 当开启对比日期时，开始日期不大于今天
+      if (!!isCompared) {
+        return current > dayjs().endOf('d');
+      }
       // 当结束日期不被禁用时，开始日期不能大于结束日期
       return range[1] && current > range[1];
     },
@@ -178,11 +182,18 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
   // 结束日期禁用的范围
   const disabledEndDate: RangePickerProps['disabledDate'] = useCallback(
     (current: Dayjs) => {
-      return (
-        current &&
-        // 结束日期不能小于开始日期，也不能大于今天
-        ((range[0] && current < range[0]) || current > dayjs().endOf('d'))
-      );
+      if (!current) {
+        return false;
+      }
+      // 当开启对比日期时，结束日期不等于开始日期，不大于今天
+      if (!!isCompared) {
+        return (
+          current > dayjs().endOf('d') ||
+          (range[0] && current.isSame(range[0], 'd'))
+        );
+      }
+      // 结束日期不能小于开始日期，也不能大于今天
+      return (range[0] && current < range[0]) || current > dayjs().endOf('d');
     },
     [range[0]],
   );
