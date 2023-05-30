@@ -45,6 +45,8 @@ type Props = {
   searchProps?: SearchProps;
   /** buttonText */
   buttonText?: React.ReactNode;
+  /** 是否显示搜索框 */
+  showSearch?: boolean;
 };
 
 export const HabitMultipleSelect: React.FC<Props> = ({
@@ -57,6 +59,7 @@ export const HabitMultipleSelect: React.FC<Props> = ({
   onChange,
   options = [],
   buttonText,
+  showSearch = true,
 }) => {
   // 气泡弹窗是否打开
   const [open, setOpen] = useState(false);
@@ -91,15 +94,18 @@ export const HabitMultipleSelect: React.FC<Props> = ({
         {...popoverProps}
         content={
           <>
-            <Search
-              placeholder="名称搜索"
-              className="habit-multiple-select-search"
-              allowClear
-              size="small"
-              {...searchProps}
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
+            {!!showSearch && (
+              <Search
+                placeholder="名称搜索"
+                className="habit-multiple-select-search"
+                allowClear
+                size="small"
+                {...searchProps}
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+            )}
+
             <Checkbox.Group value={value} onChange={onChange}>
               <Row gutter={[0, 10]}>
                 {showOptions.map((item) => (

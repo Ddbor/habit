@@ -1,6 +1,6 @@
 {
   "name": "@ddbor/habit",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "根据平时习惯二次封装的 React Ant Design",
   "homepage": "https://ddbor.github.io/habit/",
   "bugs": {
@@ -64,9 +64,9 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@umijs/lint": "^4.0.0",
-    "dumi": "^2.1.19",
+    "dumi": "^2.2.0",
     "eslint": "^8.23.0",
-    "father": "^4.1.0",
+    "father": "^4.2.1",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "2.8.7",
@@ -74,7 +74,8 @@
     "prettier-plugin-packagejson": "^2.2.18",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "stylelint": "^14.9.1"
+    "stylelint": "^14.9.1",
+    "typescript": "~5.0.2"
   },
   "peerDependencies": {
     "react": ">=16.9.0",

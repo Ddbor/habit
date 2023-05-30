@@ -58,4 +58,5 @@ export default () => {
 | `buttonProps`  | button 属性              | [ButtonProps](https://ant-design.antgroup.com/components/button-cn#api)                               | -      |
 | `searchProps`  | 搜索框属性               | [SearchProps](https://ant-design.antgroup.com/components/input-cn#components-input-demo-search-input) | -      |
 | `buttonText`   | button 文字              | `React.ReactNode`                                                                                     | -      |
+| `showSearch`   | 是否显示搜索框           | `boolean`                                                                                             | -      |
 | `onChange`     | value 变化或者清空时触发 | `(value: CheckboxValueType[]) => void`                                                                | -      |
