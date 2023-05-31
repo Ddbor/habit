@@ -1,1 +1,1 @@
-export * from './HabitMultipleSelect';
+export * from './components/HabitMultipleSelect';

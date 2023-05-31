@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import './HabitColumnSetting.css';
-import { CheckboxGroupProps, HabitColumnsType } from './typing';
+import '../HabitColumnSetting/index.css';
+import { CheckboxGroupProps, HabitColumnsType } from '../../typing';
 import { Checkbox, Tooltip } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { habitColumnsCopy, sortGroupHabitColumns } from './util';
+import { habitColumnsCopy, sortGroupHabitColumns } from '../../utils';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 
 const questionCircleStyle = {

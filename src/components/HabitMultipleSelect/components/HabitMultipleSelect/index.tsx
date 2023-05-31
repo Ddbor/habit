@@ -20,7 +20,7 @@ import { CheckboxValueType } from 'antd/es/checkbox/Group';
 import { SearchProps } from 'antd/es/input';
 import React from 'react';
 import { useMemo, useState } from 'react';
-import './HabitMultipleSelect.css';
+import './index.css';
 
 const { Search } = Input;
 

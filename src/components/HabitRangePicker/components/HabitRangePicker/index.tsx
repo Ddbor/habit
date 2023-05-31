@@ -9,7 +9,7 @@ import {
   Switch,
 } from 'antd';
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
-import './HabitRangePicker.css';
+import './index.css';
 import dayjs, { Dayjs } from 'dayjs';
 import { RangePickerProps } from 'antd/es/date-picker';
 import { PickerProps } from 'antd/es/date-picker/generatePicker';

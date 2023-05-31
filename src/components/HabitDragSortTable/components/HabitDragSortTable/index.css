@@ -1,0 +1,7 @@
+.habit-drag-sort-table-icon {
+  margin-inline-end: 8px;
+  cursor: grab !important;
+  padding: 4px;
+  font-size: 12px;
+  border-radius: 6px;
+}

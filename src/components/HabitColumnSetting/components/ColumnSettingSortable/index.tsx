@@ -1,9 +1,10 @@
 import React from 'react';
-import './HabitColumnSetting.css';
+import '../HabitColumnSetting/index.css';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import { arrayMoveImmutable, useRefFunction } from '@ant-design/pro-components';
-import { ColumnSettingSortableProps, HabitColumnsType } from './typing';
-import { habitColumnsCopy } from './util';
+import { useRefFunction } from '@ant-design/pro-components';
+import { ColumnSettingSortableProps, HabitColumnsType } from '../../typing';
+import { habitColumnsCopy } from '../../utils';
+import { arrayMoveImmutable } from '@ddbor/habit';
 
 const SortableItemComponent = SortableElement<{ value: HabitColumnsType }>(
   ({ value }: { value: HabitColumnsType }) => (

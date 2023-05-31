@@ -5,16 +5,16 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import './HabitColumnSetting.css';
+import './index.css';
 import { Button, Drawer, Input } from 'antd';
-import { ColumnSettingSortable } from './ColumnSettingSortable';
+import { ColumnSettingSortable } from '../ColumnSettingSortable';
 import {
   HabitColumnSettingProps,
   HabitColumnsType,
   StorageColumnsType,
-} from './typing';
-import { CheckboxGroup } from './CheckboxGroup';
-import { habitColumnsCopy, habitSortColumns } from './util';
+} from '../../typing';
+import { CheckboxGroup } from '../CheckboxGroup';
+import { habitColumnsCopy, habitSortColumns } from '../../utils';
 
 const { Search } = Input;
 

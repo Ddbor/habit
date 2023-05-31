@@ -2,7 +2,7 @@
 nav: 组件
 group:
   order: 2
-order: 3
+order: 2
 ---
 
 # 下拉多选

@@ -1,3 +1,3 @@
-export * from './HabitColumnSetting';
+export * from './components/HabitColumnSetting';
 export * from './typing';
-export * from './util';
+export * from './utils';
