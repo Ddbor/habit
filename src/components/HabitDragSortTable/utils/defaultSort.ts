@@ -1,5 +1,5 @@
+import { arrayMoveImmutable } from '@ddbor/habit';
 import type { Active, Over } from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
 
 /**
  * 默认排序方式，不支持树形，不支持跨组，不支持自由升降级
@@ -8,20 +8,24 @@ import { arrayMove } from '@dnd-kit/sortable';
  * @param over
  * @returns
  */
-export const defaultSort = <T>(dataSource: T[], active: Active, over: Over) => {
+export const defaultSort = <T>(
+  dataSource: T[],
+  active: Active,
+  over: Over,
+): { data: T[]; status: boolean } => {
   const [fromLevel, toLevel] = [active.id, over.id].map((item) =>
     item.toString().split('-'),
   );
   // 最顶级 length = 1
   if (fromLevel.length === toLevel.length && fromLevel.length === 1) {
-    const newData = arrayMove<T>(
-      dataSource || [],
-      parseInt(active.id as string),
-      parseInt(over.id as string),
-    );
+    const newData = arrayMoveImmutable<T>({
+      array: dataSource,
+      fromIndex: parseInt(fromLevel[0] as string),
+      toIndex: parseInt(toLevel[0] as string),
+    });
 
-    return newData;
+    return { data: newData, status: true };
   }
 
-  return dataSource;
+  return { data: dataSource, status: false };
 };

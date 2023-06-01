@@ -1,13 +1,13 @@
 import { arrayMoveImmutable } from '@ddbor/habit';
 import type { Active, Over } from '@dnd-kit/core';
-import { defaultSort } from './defaultSort';
+import { levelDataSource } from './levelDataSource';
 
 /**
- * 树形排序方式，不支持跨组，不支持自由升降级
- * 同等级子项排序
+ * 树形排序方式，同等级子项排序，不支持跨组，不支持自由升降级
  * @param dataSource
  * @param active
  * @param over
+ * @param childName
  * @returns
  */
 export const treeSort = <T>(
@@ -15,34 +15,33 @@ export const treeSort = <T>(
   active: Active,
   over: Over,
   childName: string,
-) => {
-  // 首先得具备基础功能呀
-  const newData = defaultSort(dataSource, active, over);
-
+): { data: T[]; status: boolean } => {
   const [fromLevel, toLevel] = [active.id, over.id].map((item) =>
     item.toString().split('-'),
   );
 
-  // 必须是同一个父元素并且同等级
-  if (fromLevel[0] !== toLevel[0] || fromLevel.length !== toLevel.length) {
-    return newData;
+  // 获取到自身level，并且移除数组中最后一项
+  const lastFromLevel = fromLevel.pop() as string;
+  const lastToLevel = toLevel.pop() as string;
+
+  // level深度一样，并且除最后一级，其余level必须是同等级，并且得有第二层，否则就是默认排序
+  if (
+    fromLevel.length !== toLevel.length ||
+    !fromLevel.length ||
+    fromLevel.join(',') !== toLevel.join(',')
+  ) {
+    return { data: dataSource, status: false };
   }
 
   // 是哪个父元素
-  const parent: any = fromLevel
-    .slice(0, fromLevel.length - 1)
-    .reduce((obj: any, level) => {
-      if (Array.isArray(obj[childName])) {
-        return obj[childName][Number(level)];
-      }
-      return obj;
-    }, newData);
+  const parent: any = levelDataSource(fromLevel, dataSource, childName);
 
-  arrayMoveImmutable<T>({
+  // 移动这个父元素的子项
+  parent[childName] = arrayMoveImmutable<T>({
     array: (parent as any)[childName],
-    fromIndex: parseInt(fromLevel[length - 1] as string),
-    toIndex: parseInt(toLevel[length - 1] as string),
+    fromIndex: parseInt(lastFromLevel),
+    toIndex: parseInt(lastToLevel),
   });
 
-  return newData;
+  return { data: dataSource, status: true };
 };

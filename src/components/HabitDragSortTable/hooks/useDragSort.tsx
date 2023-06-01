@@ -16,7 +16,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import type { TableComponents } from 'rc-table/lib/interface';
 import React, { createContext, useContext } from 'react';
-import { defaultSort, treeKeys, treeSort } from '../utils';
+import { defaultSort, freeSort, groupSort, treeKeys, treeSort } from '../utils';
 import { deepFindItem } from '@ddbor/habit';
 
 const SortableItemContextValue = createContext<{
@@ -110,12 +110,12 @@ const SortableItemCell = React.memo((props: any) => {
 
 export interface UseDragSortOptions<T> {
   dataSource?: T[];
-  onDragSortEnd?: (newDataSource: T[]) => Promise<void> | void;
+  onDragSortEnd?: (newDataSource: T[], status: boolean) => Promise<void> | void;
   dragSortKey?: string;
   components?: TableComponents<T>;
   rowKey: any;
   DragHandle: React.FC<any>;
-  treeSort: boolean;
+  sortType: string;
   childrenColumnName: string;
   treeKeyName: string;
 }
@@ -128,7 +128,7 @@ export function useDragSort<T>(props: UseDragSortOptions<T>) {
     onDragSortEnd,
     DragHandle,
     dragSortKey,
-    treeSort: treeSortStatue,
+    sortType,
     childrenColumnName,
     treeKeyName,
   } = props;
@@ -140,18 +140,27 @@ export function useDragSort<T>(props: UseDragSortOptions<T>) {
     if (!over?.id?.toString() || active.id === over?.id) {
       return;
     }
-    console.log(event);
-    if (!treeSortStatue) {
-      onDragSortEnd?.(defaultSort(dataSource, active, over));
-    } else {
-      onDragSortEnd?.(treeSort(dataSource, active, over, childrenColumnName));
+    // console.log(event, 'DragEndEvent');
+
+    let sortInfo = defaultSort(dataSource, active, over);
+
+    if (sortInfo.status) {
+      onDragSortEnd?.(sortInfo.data, sortInfo.status);
+      return;
     }
+
+    if (sortType === 'freeSort') {
+      sortInfo = freeSort(dataSource, active, over, childrenColumnName);
+    } else if (sortType === 'groupSort') {
+      sortInfo = groupSort(dataSource, active, over, childrenColumnName);
+    } else if (sortType === 'treeSort') {
+      sortInfo = treeSort(dataSource, active, over, childrenColumnName);
+    }
+
+    onDragSortEnd?.(sortInfo.data, sortInfo.status);
   }
 
   const DraggableContainer = useRefFunction((p: any) => {
-    // const itemsIndex = dataSource.map(
-    //   (item: any, index) => item?.key ?? index?.toString(),
-    // );
     // treeKeys 会将树形所有项目设置为可拖动
     return (
       <SortableContext
@@ -166,15 +175,6 @@ export function useDragSort<T>(props: UseDragSortOptions<T>) {
   const DraggableBodyRow = useRefFunction((p: any) => {
     const { ...restProps } = p;
     // 函数 findIndex 基于 Table rowKey props 并且应该始终是正确的数组索引
-    // let index = '-1';
-    // if (sortType === 'default') {
-    //   index = dataSource
-    //     .findIndex(
-    //       (item: any) =>
-    //         item[props.rowKey ?? 'index'] === restProps['data-row-key'],
-    //     )
-    //     ?.toString();
-    // }
     const currentData: any = deepFindItem(
       dataSource,
       childrenColumnName,
