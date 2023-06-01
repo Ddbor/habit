@@ -823,14 +823,13 @@ export default () => {
 
 ## API
 
-| 参数                    | 说明                                                                                 | 类型                                                                                                  | 默认值      |
-| ----------------------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ----------- |
-| `sortType`              | 排序类型                                                                             | `'default' \| 'treeSort' \| 'groupSort' \| 'freeSort'`                                                | `'default'` |
-| `treeKeyName`           | 树形结构标识名称，用于拖拽时使用                                                     | `string`                                                                                              | `'treeKey'` |
-| `dragSortKey`           | 拖动排序列 key 值，如配置此参数，则会在该 key 对应的行显示拖拽排序把手，允许拖拽排序 | `string`                                                                                              | -           |
-| `dragSortHandlerRender` | 渲染自定义拖动排序把手的函数,如配置了 dragSortKey 但未配置此参数，则使用默认把手图标 | `(rowdata: T,idx: number,props: any) => React.ReactNode`                                              | -           |
-| `searchProps`           | 搜索框属性                                                                           | [SearchProps](https://ant-design.antgroup.com/components/input-cn#components-input-demo-search-input) | -           |
-| `onDragSortEnd`         | 拖动排序完成回调                                                                     | `(newDataSource: T[], status: boolean) => Promise<void> \| void`                                      | -           |
+| 参数                    | 说明                                                                                 | 类型                                                             | 默认值      |
+| ----------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------- | ----------- |
+| `sortType`              | 排序类型                                                                             | `'default' \| 'treeSort' \| 'groupSort' \| 'freeSort'`           | `'default'` |
+| `treeKeyName`           | 树形结构标识名称，用于拖拽时使用                                                     | `string`                                                         | `'treeKey'` |
+| `dragSortKey`           | 拖动排序列 key 值，如配置此参数，则会在该 key 对应的行显示拖拽排序把手，允许拖拽排序 | `string`                                                         | -           |
+| `dragSortHandlerRender` | 渲染自定义拖动排序把手的函数,如配置了 dragSortKey 但未配置此参数，则使用默认把手图标 | `(rowdata: T,idx: number,props: any) => React.ReactNode`         | -           |
+| `onDragSortEnd`         | 拖动排序完成回调                                                                     | `(newDataSource: T[], status: boolean) => Promise<void> \| void` | -           |
 
 ### sortType
 
