@@ -37,7 +37,7 @@ export type HabitDragTableProps<T, U> = {
   onDragSortEnd?: (newDataSource: T[], status: boolean) => Promise<void> | void;
 } & ProTableProps<T, U>;
 
-export const HabitDragSortTable: React.FC = <
+export const HabitDragSortTable = <
   T extends Record<string, any>,
   U extends ParamsType = ParamsType,
   ValueType = 'text',
