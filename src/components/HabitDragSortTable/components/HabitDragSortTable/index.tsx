@@ -60,9 +60,9 @@ export const HabitDragSortTable = <
   } = props;
 
   const [dataSource, setDataSource] = useMergedState<T[]>(
-    () => defaultData || [],
+    () => setTreeKey(defaultData || []),
     {
-      value: originDataSource as T[],
+      value: setTreeKey(originDataSource as T[]),
       onChange: onDataSourceChange,
     },
   );
@@ -118,7 +118,7 @@ export const HabitDragSortTable = <
         })}
         rowKey={rowKey}
         onLoad={wrapOnload}
-        dataSource={setTreeKey(dataSource)}
+        dataSource={dataSource}
         onDataSourceChange={onDataSourceChange}
         components={components}
         tableViewRender={(_, defaultDom) => {
