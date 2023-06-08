@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import '../HabitColumnSetting/index.css';
 import { CheckboxGroupProps, HabitColumnsType } from '../../typing';
-import { Checkbox, Tooltip } from 'antd';
+import { Checkbox, Popover } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { habitColumnsCopy, sortGroupHabitColumns } from '../../utils';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
@@ -109,9 +109,9 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
                   </span>
                 </Checkbox>
                 {colItem.description && (
-                  <Tooltip title={colItem.description}>
+                  <Popover content={colItem.description}>
                     <QuestionCircleOutlined style={questionCircleStyle} />
-                  </Tooltip>
+                  </Popover>
                 )}
               </div>
             ))}

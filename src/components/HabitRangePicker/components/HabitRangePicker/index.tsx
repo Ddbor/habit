@@ -188,17 +188,14 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
       if (!current) {
         return false;
       }
-      // 当开启对比日期时，结束日期不等于开始日期，不大于今天
+      // 不大于今天
       if (!!isCompared) {
-        return (
-          current > dayjs().endOf('d') ||
-          (range[0] && current.isSame(range[0], 'd'))
-        );
+        return current > dayjs().endOf('d');
       }
       // 结束日期不能小于开始日期，也不能大于今天
       return (range[0] && current < range[0]) || current > dayjs().endOf('d');
     },
-    [range[0]],
+    [range[0], isCompared],
   );
 
   // 监听日期范围变化，更新存储的日期
