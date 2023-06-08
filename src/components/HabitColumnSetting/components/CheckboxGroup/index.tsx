@@ -109,7 +109,12 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
                   </span>
                 </Checkbox>
                 {colItem.description && (
-                  <Popover content={colItem.description}>
+                  <Popover
+                    content={colItem.description}
+                    overlayInnerStyle={{
+                      maxWidth: 200,
+                    }}
+                  >
                     <QuestionCircleOutlined style={questionCircleStyle} />
                   </Popover>
                 )}
