@@ -1,0 +1,108 @@
+.habit-selecto-week {
+  display: flex;
+  user-select: none;
+}
+
+.habit-selecto-week-right {
+  flex: 1;
+}
+
+.habit-selecto-week-left {
+  flex: 0 0 44px;
+  border-top: 1px solid #e4e7f0;
+  border-right: 1px solid #e4e7f0;
+  border-left: 1px solid #e4e7f0;
+  overflow: hidden;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  box-sizing: border-box;
+}
+
+.habit-selecto-week-left li {
+  color: #333;
+  font-size: 12px;
+  height: 40px;
+  line-height: 39px;
+  text-align: center;
+  border-bottom: 1px solid #e4e7f0;
+  box-sizing: border-box;
+}
+
+.habit-selecto-week-left .habit-selecto-week-title {
+  height: 61px;
+  line-height: 60px;
+  border-bottom: 1px solid #e4e7f0;
+  box-sizing: border-box;
+}
+
+.habit-selecto-week ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.habit-selecto-week ul li {
+  list-style: none;
+}
+
+.habit-selecto-week-split {
+  display: flex;
+  text-align: center;
+  border-top: 1px solid #e4e7f0;
+  border-bottom: 1px solid #e4e7f0;
+  border-top-right-radius: 8px;
+  background-color: #fff;
+  color: #333;
+  user-select: none;
+  overflow: hidden;
+  width: 100%;
+}
+
+.habit-selecto-week-split li {
+  flex: 1;
+  font-size: 12px;
+  height: 30px;
+  line-height: 30px;
+  border-right: 1px solid #e4e7f0;
+}
+
+.habit-selecto-week-hour {
+  display: flex;
+  text-align: center;
+  background-color: #fff;
+  color: #333;
+  user-select: none;
+  width: 100%;
+}
+
+.habit-selecto-week-hour li {
+  flex: 1;
+  height: 30px;
+  line-height: 30px;
+  border-bottom: 1px solid #e4e7f0;
+  border-right: 1px solid #e4e7f0;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+
+.habit-selecto-week-cont {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #fff;
+  width: 100%;
+  border-bottom-right-radius: 8px;
+  overflow: hidden;
+}
+
+.habit-selecto-week-cont li {
+  flex: 1 1 22px;
+  height: 40px;
+  background-color: #fff;
+  border-bottom: 1px solid #e4e7f0;
+  border-right: 1px solid #e4e7f0;
+  box-sizing: border-box;
+}
+
+.habit-selecto-week-cont li:last-of-type {
+  border-bottom-right-radius: 8px;
+}
