@@ -25,6 +25,7 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   onOk,
   persistenceKey,
   persistenceType,
+  extraContent,
   ...rest
 }) => {
   const { onClose } = rest;
@@ -36,8 +37,6 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   const [filterTitle, setFilterTitle] = useState<string>('');
   // 存储每次columns变化后的数据
   const saveColumns = useRef<HabitColumnsType[]>([]);
-  // 初次进入存储，用于恢复默认值
-  const [initColumns, setInitColumns] = useState<HabitColumnsType[]>([]);
   // 是否应该进行初次进入的操作，默认为true
   const [isInit, setIsInit] = useState(true);
   const noStorage = useMemo(
@@ -129,7 +128,6 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
     // 这时应该还没有打开抽屉，但是组件已经挂载
     if (!open && isInit && !noStorage) {
       const habitColumns = genColumnsByStorage(columns);
-      setInitColumns(habitColumns);
       setIsInit(false);
       onOk?.(
         genNewColumns(
@@ -148,12 +146,6 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   const handleCheckboxChange = (list: HabitColumnsType[]) => {
     setSortItems(habitSortColumns(list));
     setCheckItems(list);
-  };
-
-  // 恢复默认
-  const handleReset = () => {
-    setSortItems(habitSortColumns(habitColumnsCopy(initColumns)));
-    setCheckItems(initColumns);
   };
 
   // 清空
@@ -233,9 +225,7 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
               <a className="habit-column-setting-right-a" onClick={handleClear}>
                 清空
               </a>
-              <a className="habit-column-setting-right-a" onClick={handleReset}>
-                恢复默认
-              </a>
+              {extraContent}
             </div>
             <div className="habit-column-setting-right-alert">
               拖动以下字段进行排序

@@ -61,6 +61,8 @@ export type HabitColumnSettingProps = DrawerProps & {
   max?: number;
   /** 提交回调 */
   onOk?: (newColumns: HabitColumnsType[]) => void;
+  /** 右侧头部额外内容 */
+  extraContent?: React.ReactNode;
 };
 
 export type ColumnSettingSortableProps = {

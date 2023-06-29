@@ -728,6 +728,7 @@ export default () => {
 | `persistenceType` | 持久化的类型，支持 localStorage 和 sessionStorage | `'localStorage' \| 'sessionStorage'`                                      | -      |
 | `persistenceKey`  | 持久化的 key，用于存储到 storage 中               | `string`                                                                  | -      |
 | `max`             | 最大值，不传则不限制                              | `number`                                                                  | -      |
+| `extraContent`    | 右侧头部额外内容                                  | `React.ReactNode`                                                         | -      |
 | `onOk`            | 点击确定，或者使用持久化存储时组件挂载时触发      | `(newColumns: HabitColumnsType[]) => void`                                | -      |
 
 ### ColumnsPropertiesType
