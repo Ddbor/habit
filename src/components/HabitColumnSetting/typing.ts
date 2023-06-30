@@ -62,7 +62,9 @@ export type HabitColumnSettingProps = DrawerProps & {
   /** 最小值 */
   min?: number;
   /** 提交回调 */
-  onOk?: (newColumns: HabitColumnsType[]) => Promise<any> | boolean | undefined;
+  onOk?: (
+    newColumns: HabitColumnsType[],
+  ) => Promise<any> | boolean | undefined | void;
   /** 右侧头部额外内容 */
   extraContent?: React.ReactNode;
 };

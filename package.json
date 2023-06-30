@@ -1,6 +1,6 @@
 {
   "name": "@ddbor/habit",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "根据平时习惯二次封装的 React Ant Design",
   "homepage": "https://ddbor.github.io/habit/",
   "bugs": {
