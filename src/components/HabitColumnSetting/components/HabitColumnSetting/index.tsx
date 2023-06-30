@@ -182,15 +182,15 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
         }}
         footer={
           <div>
+            <Button type="default" onClick={onClose}>
+              取消
+            </Button>
             <Button
               type="primary"
-              style={{ marginRight: 15 }}
+              style={{ marginLeft: 15 }}
               onClick={handleOk}
             >
               确定
-            </Button>
-            <Button type="default" onClick={onClose}>
-              取消
             </Button>
           </div>
         }
