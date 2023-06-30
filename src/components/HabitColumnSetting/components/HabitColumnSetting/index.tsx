@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import './index.css';
-import { Button, Drawer, Input } from 'antd';
+import { Button, Drawer, Input, Space, theme } from 'antd';
 import { ColumnSettingSortable } from '../ColumnSettingSortable';
 import {
   HabitColumnSettingProps,
@@ -15,13 +15,16 @@ import {
 } from '../../typing';
 import { CheckboxGroup } from '../CheckboxGroup';
 import { habitColumnsCopy, habitSortColumns } from '../../utils';
+import { CloseCircleFilled } from '@ant-design/icons';
 
 const { Search } = Input;
+const { useToken } = theme;
 
 export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   columns,
   open,
   max,
+  min = 1,
   onOk,
   persistenceKey,
   persistenceType,
@@ -43,6 +46,8 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
     () => !persistenceKey || !persistenceType || typeof window === 'undefined',
     [persistenceKey, persistenceType],
   );
+  const { token } = useToken();
+  const [showCountError, setShowCountError] = useState(false);
 
   // 使用本地持久存储中的数据设置columns
   const genColumnsByStorage = useCallback(
@@ -161,13 +166,23 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
     setCheckItems(newData);
   };
 
-  const handleOk = (
+  const handleOk = async (
     e: React.MouseEvent<Element, MouseEvent> | React.KeyboardEvent<Element>,
   ) => {
+    if (typeof min === 'number' && sortItems.length < min) {
+      setShowCountError(true);
+      return;
+    }
+    if (typeof max === 'number' && sortItems.length > max) {
+      setShowCountError(true);
+      return;
+    }
     const newColumns = genNewColumns(saveColumns.current, sortItems);
+    setShowCountError(false);
     setStorageByColumns(newColumns);
-    onOk?.(newColumns);
-    onClose?.(e);
+    if ((await onOk?.(newColumns)) !== false) {
+      onClose?.(e);
+    }
   };
 
   return (
@@ -181,18 +196,26 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
           backgroundColor: '#f9f9f9',
         }}
         footer={
-          <div>
+          <Space>
             <Button type="default" onClick={onClose}>
               取消
             </Button>
-            <Button
-              type="primary"
-              style={{ marginLeft: 15 }}
-              onClick={handleOk}
-            >
+            <Button type="primary" onClick={handleOk}>
               确定
             </Button>
-          </div>
+            {showCountError && (
+              <>
+                <CloseCircleFilled
+                  style={{ color: token.colorError, fontSize: 12 }}
+                />
+                <span style={{ color: token.colorError, fontSize: 12 }}>
+                  请{typeof min === 'number' ? `至少选择 ${min} 个指标` : ''}
+                  {typeof min === 'number' && typeof max === 'number' && '，'}
+                  {typeof max === 'number' ? `至多选择 ${max} 个指标` : ''}
+                </span>
+              </>
+            )}
+          </Space>
         }
         open={open}
         {...rest}
@@ -220,7 +243,8 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
           <div className="habit-column-setting-right">
             <div className="habit-column-setting-right-head">
               <span className="habit-column-setting-checkbox-label">
-                已选（{sortItems.length} {max ? `/${max}` : null}）项
+                已选（{sortItems.length}
+                {max ? ` / ${max}` : null}）项
               </span>
               <a className="habit-column-setting-right-a" onClick={handleClear}>
                 清空

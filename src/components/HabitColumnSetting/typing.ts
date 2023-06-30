@@ -59,8 +59,10 @@ export type HabitColumnSettingProps = DrawerProps & {
   persistenceKey?: string;
   /** 最大值，不传则不限制 */
   max?: number;
+  /** 最小值 */
+  min?: number;
   /** 提交回调 */
-  onOk?: (newColumns: HabitColumnsType[]) => void;
+  onOk?: (newColumns: HabitColumnsType[]) => Promise<any> | boolean | undefined;
   /** 右侧头部额外内容 */
   extraContent?: React.ReactNode;
 };

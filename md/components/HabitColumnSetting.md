@@ -23,7 +23,6 @@ const data: HabitColumnsType[] = [
     title: '数据一',
     key: '1',
     description: '这是数据一',
-    disable: true,
     show: true,
     value: 4132,
     properties: {
@@ -722,14 +721,15 @@ export default () => {
 
 ## API
 
-| 参数              | 说明                                              | 类型                                                                      | 默认值 |
-| ----------------- | ------------------------------------------------- | ------------------------------------------------------------------------- | ------ |
-| `columns`         | 列配置                                            | [HabitColumnsType](/components/habit-column-setting#habitcolumnstype)`[]` | -      |
-| `persistenceType` | 持久化的类型，支持 localStorage 和 sessionStorage | `'localStorage' \| 'sessionStorage'`                                      | -      |
-| `persistenceKey`  | 持久化的 key，用于存储到 storage 中               | `string`                                                                  | -      |
-| `max`             | 最大值，不传则不限制                              | `number`                                                                  | -      |
-| `extraContent`    | 右侧头部额外内容                                  | `React.ReactNode`                                                         | -      |
-| `onOk`            | 点击确定，或者使用持久化存储时组件挂载时触发      | `(newColumns: HabitColumnsType[]) => void`                                | -      |
+| 参数              | 说明                                                                             | 类型                                                                       | 默认值 |
+| ----------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ------ |
+| `columns`         | 列配置                                                                           | [HabitColumnsType](/components/habit-column-setting#habitcolumnstype)`[]`  | -      |
+| `persistenceType` | 持久化的类型，支持 localStorage 和 sessionStorage                                | `'localStorage' \| 'sessionStorage'`                                       | -      |
+| `persistenceKey`  | 持久化的 key，用于存储到 storage 中                                              | `string`                                                                   | -      |
+| `max`             | 最大值，不传则不限制                                                             | `number`                                                                   | -      |
+| `min`             | 最小值                                                                           | `number`                                                                   | `1`    |
+| `extraContent`    | 右侧头部额外内容                                                                 | `React.ReactNode`                                                          | -      |
+| `onOk`            | 点击确定，或者使用持久化存储时组件挂载时触发，如果函数返回 false，将不会关闭抽屉 | `(newColumns: HabitColumnsType[]) => Promise<any> \| boolean \| undefined` | -      |
 
 ### ColumnsPropertiesType
 
