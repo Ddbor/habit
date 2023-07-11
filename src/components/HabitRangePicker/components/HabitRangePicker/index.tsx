@@ -223,7 +223,11 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
 
   // 气泡卡片显示隐藏事件
   const handlePopoverOpenChange = (open: boolean) => {
-    setPopoverOpen(open);
+    if (!!buttonProps?.disabled) {
+      setPopoverOpen(false);
+    } else {
+      setPopoverOpen(open);
+    }
   };
 
   // 确定
@@ -351,31 +355,27 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
             )}
             <div className="habit-range-picker-popover-footer">
               <Button
+                size="small"
+                {...cancelButtonProps}
+                style={{ marginRight: '8px' }}
+                onClick={() => setPopoverOpen(false)}
+              >
+                取消
+              </Button>
+              <Button
                 type="primary"
                 size="small"
-                style={{ marginRight: '8px' }}
                 {...subtmitButtonProps}
                 onClick={() => handleOk()}
               >
                 确定
-              </Button>
-              <Button
-                size="small"
-                {...cancelButtonProps}
-                onClick={() => setPopoverOpen(false)}
-              >
-                取消
               </Button>
             </div>
           </div>
         }
       >
         <div className="habit-range-picker">
-          <Button
-            {...buttonProps}
-            htmlType="reset"
-            onClick={() => setPopoverOpen(!popoverOpen)}
-          >
+          <Button {...buttonProps} onClick={() => setPopoverOpen(!popoverOpen)}>
             <div className="habit-range-picker-button">
               <CalendarOutlined
                 style={{
