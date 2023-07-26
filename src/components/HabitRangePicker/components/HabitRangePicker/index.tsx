@@ -75,11 +75,6 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
   const showCompared = useMemo(() => {
     return typeof compared === 'boolean';
   }, [compared]);
-  // 当前选择的快捷日期文本
-  // 增加这个字段是因为，比方说有两个快捷日期分别是【最近7天】【上周】
-  // 当选择了【最近7天】时，这个字段会显示【最近7天】，但是当选择了【上周】时，如果日期一样的话这个字段还是会显示【最近7天】
-  // 所以需要一个字段来存储当前选择的快捷日期文本
-  const [presetActionText, setPresetActionText] = useState<React.ReactNode>('');
   // 对比开关的当前状态，用于在提交时使用
   const [isCompared, setIsCompared] = useState<boolean | null>(false);
 
@@ -122,11 +117,6 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
       ];
     }
 
-    // 当选择了快捷日期时，只显示快捷日期
-    if (presetActionText) {
-      return [presetActionText, ''];
-    }
-
     // 当结束日期未被禁用时，开始日期和结束日期都显示
     const commonLabel = (presets || [])
       ?.concat(defaultPresets())
@@ -141,14 +131,7 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
       commonLabel || showRangeString[0],
       commonLabel ? '' : showRangeString[1],
     ];
-  }, [
-    value,
-    presets,
-    disabledEndDatePicker,
-    showCompared,
-    showRangeString,
-    presetActionText,
-  ]);
+  }, [value, presets, disabledEndDatePicker, showCompared, showRangeString]);
 
   // 文字样式
   const showRangeStringStyle = useMemo(
@@ -234,11 +217,6 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
   const handleOk = () => {
     setPopoverOpen(false);
     onChange?.(range, rangeString, isCompared);
-    // 因为快捷日期选择与提交按钮的函数不是同一个函数
-    // 点击快捷日期的时候会设置快捷日期文本
-    // 当使用提交按钮的时候，快捷日期文本不会被清空
-    // 所以需要在这里清空
-    setPresetActionText(null);
   };
 
   // 快捷日期点击
@@ -254,9 +232,6 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
     setRangeString(rangeString);
     setPopoverOpen(false);
     onChange?.(item.value, rangeString, isCompared);
-    // 设置快捷日期文本
-    // 只能在这里设置
-    setPresetActionText(item?.label);
   };
 
   // 预设时间范围快捷选择列表
