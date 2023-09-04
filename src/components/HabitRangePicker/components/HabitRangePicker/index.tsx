@@ -148,21 +148,10 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
       if (!current) {
         return false;
       }
-      // 当结束日期被禁用时,开始日期不能大于今天
-      if (disabledEndDatePickerWhenOpen) {
-        return current > dayjs().endOf('d');
-      }
-      // 当开启对比日期时，开始日期不等于结束日期，开始日期不大于今天
-      if (!!isCompared) {
-        return (
-          current > dayjs().endOf('d') ||
-          (range[1] && current.isSame(range[1], 'd'))
-        );
-      }
-      // 当结束日期不被禁用时，开始日期不能大于结束日期
-      return range[1] && current > range[1];
+
+      return current > dayjs().endOf('d');
     },
-    [range[1], disabledEndDatePickerWhenOpen],
+    [range[1]],
   );
 
   // 结束日期禁用的范围
@@ -171,10 +160,12 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
       if (!current) {
         return false;
       }
-      // 不大于今天
+
+      // 开启对比日期时，不大于今天
       if (!!isCompared) {
         return current > dayjs().endOf('d');
       }
+
       // 结束日期不能小于开始日期，也不能大于今天
       return (range[0] && current < range[0]) || current > dayjs().endOf('d');
     },
@@ -190,12 +181,16 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
     ];
     setShowRangeString(rangeString);
     setRangeString(rangeString);
-  }, [value]);
+  }, [value, popoverOpen]);
 
   // 开始日期选择
   const handleStartChange = (date: Dayjs, dateString: string) => {
-    setRange([date, range[1]]);
-    setRangeString([dateString, rangeString[1]]);
+    const newRange: [Dayjs, Dayjs] = [date, range[1]];
+    if (date > range[1]) {
+      newRange[1] = dayjs(date);
+    }
+    setRange(newRange);
+    setRangeString([dateString, dayjs(newRange[1]).format(format)]);
   };
 
   // 结束日期选择
@@ -333,7 +328,9 @@ export const HabitRangePicker: React.FC<HabitRangePickerProps> = ({
                 size="small"
                 {...cancelButtonProps}
                 style={{ marginRight: '8px' }}
-                onClick={() => setPopoverOpen(false)}
+                onClick={() => {
+                  setPopoverOpen(false);
+                }}
               >
                 取消
               </Button>
