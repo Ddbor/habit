@@ -1,4 +1,4 @@
-import { HabitColumnsType, HabitGroupColumnsType } from './typing';
+import { HabitColumnsType, HabitGroupColumnsType } from '../typing';
 
 /**
  * 对表格列进行分组

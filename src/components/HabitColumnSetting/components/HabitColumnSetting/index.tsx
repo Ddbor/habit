@@ -149,7 +149,16 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   };
 
   const handleCheckboxChange = (list: HabitColumnsType[]) => {
-    setSortItems(habitSortColumns(list));
+    setSortItems(
+      habitSortColumns(
+        list.map((item) => {
+          return {
+            ...item,
+            order: sortItems.find((v) => v.key === item.key)?.order,
+          };
+        }),
+      ),
+    );
     setCheckItems(list);
   };
 
