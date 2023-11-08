@@ -161,7 +161,7 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
         if (!!addList.find((v) => v.key === item.key)) {
           return {
             ...item,
-            order: currentOrder + 1,
+            order: ++currentOrder,
           };
         }
         // 找出在原来列表中的位置
