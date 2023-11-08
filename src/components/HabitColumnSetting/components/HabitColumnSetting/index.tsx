@@ -149,16 +149,31 @@ export const HabitColumnSetting: React.FC<HabitColumnSettingProps> = ({
   };
 
   const handleCheckboxChange = (list: HabitColumnsType[]) => {
-    setSortItems(
-      habitSortColumns(
-        list.map((item) => {
+    // 找出新增的
+    const addList = list.filter(
+      (item) => item.show && !sortItems.find((v) => v.key === item.key),
+    );
+    let currentOrder = sortItems.length - 1;
+
+    // 新列表
+    const newSortItems = habitSortColumns(
+      list.map((item, index) => {
+        if (!!addList.find((v) => v.key === item.key)) {
           return {
             ...item,
-            order: sortItems.find((v) => v.key === item.key)?.order,
+            order: currentOrder + 1,
           };
-        }),
-      ),
+        }
+        // 找出在原来列表中的位置
+        const oldItemIndex = sortItems.findIndex((v) => v.key === item.key);
+        return {
+          ...item,
+          order: oldItemIndex === -1 ? undefined : oldItemIndex,
+        };
+      }),
     );
+
+    setSortItems(newSortItems);
     setCheckItems(list);
   };
 
